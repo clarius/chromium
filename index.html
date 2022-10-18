@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/chromium/assets/css/style.css?v=75652f13ad28bbdba51257ebb499b56d9aabebef">
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>dotnet-chromium | chromium</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="dotnet-chromium" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Run a portable Chromium using dotnet 6 and nuget." />
+<meta property="og:description" content="Run a portable Chromium using dotnet 6 and nuget." />
+<meta property="og:site_name" content="chromium" />
+<script type="application/ld+json">
+{"@type":"WebSite","url":"/chromium/","headline":"dotnet-chromium","description":"Run a portable Chromium using dotnet 6 and nuget.","name":"chromium","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/devlooped/chromium">View on GitHub</a>
+
+          <h1 id="project_title">chromium</h1>
+          <h2 id="project_tagline">Run a portable Chromium using dotnet 6 and nuget.</h2>
+
+          
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1 id="-dotnet-chromium"><img src="https://raw.githubusercontent.com/devlooped/chromium/main/assets/img/icon.png" alt="Icon" /> dotnet-chromium</h1>
+
+<p><a href="https://www.nuget.org/packages/dotnet-chromium"><img src="https://img.shields.io/nuget/v/dotnet-chromium.svg?color=royalblue" alt="Version" /></a> 
+<a href="https://www.nuget.org/packages/dotnet-chromium"><img src="https://img.shields.io/nuget/dt/dotnet-chromium.svg?color=green" alt="Downloads" /></a> 
+<a href="https://github.com/devlooped/chromium/blob/main/license.txt"><img src="https://img.shields.io/github/license/devlooped/chromium.svg?color=blue" alt="License" /></a> 
+<a href="https://github.com/devlooped/chromium/actions"><img src="https://github.com/devlooped/chromium/workflows/build/badge.svg?branch=main" alt="Build" /></a></p>
+
+<p>Chromium for .NET 6.</p>
+
+<p>This project allows running a portable embedded version of Chromium from 
+either a .NET CLI tool or a regular .NET application without having to install 
+it.</p>
+
+<p>This can be helpful for automating a browser as part of your regular app 
+normal behavior, such as using <a href="https://playwright.dev/dotnet/">Microsoft.Playwright</a>.</p>
+
+<h2 id="usage">Usage</h2>
+
+<p>The project provides two main ways to consume it:</p>
+<ul>
+  <li>As a dotnet global tool</li>
+  <li>As a regular nuget package library reference.</li>
+</ul>
+
+<h3 id="dotnet-global-tool">dotnet global tool</h3>
+
+<p>Install with:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet tool install -g dotnet-chromium
+</code></pre></div></div>
+
+<p>Run with:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chromium [url] [switches]
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">url</code> is optional, and causes the browser to immediately navigate 
+to that URL on open.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">switches</code> are optional, and are passed directly to Chromium. For 
+example, to run the browser headless, you’d pass <code class="language-plaintext highlighter-rouge">--headless</code>. See the 
+<a href="https://peter.sh/experiments/chromium-command-line-switches/">list of chromium switches</a> 
+for more information.</p>
+
+<h3 id="nuget-package-library-reference">nuget package library reference</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package chromium
+</code></pre></div></div>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">Chromium</span><span class="p">.</span><span class="n">Path</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Found Chromium for current platform at </span><span class="p">{</span><span class="n">Chromium</span><span class="p">.</span><span class="n">Path</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+<span class="k">else</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Current runtime </span><span class="p">{</span><span class="n">System</span><span class="p">.</span><span class="n">Runtime</span><span class="p">.</span><span class="n">InteropServices</span><span class="p">.</span><span class="n">RuntimeInformation</span><span class="p">.</span><span class="n">RuntimeIdentifier</span><span class="p">}</span><span class="s"> is not supported."</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>This will provide the runtime lookup of the native binaries, but will <em>not</em> provide the binaries themselves. 
+In other words, the <code class="language-plaintext highlighter-rouge">chromium</code> package is not a <strong>metapackage</strong>. Since NuGet does not provide a built-in 
+mechanism to conditionally reference specific packages depending on the current runtime platform or library 
+target’s <code class="language-plaintext highlighter-rouge">RuntimeIdentifier(s)</code>, a metapackage is not practical since it would cause a restore of <em>all</em> 
+platforms, which only bloats download and install size unnecessarily. If you know what platforms your app 
+will run on, you can simply reference the relevant ones manually by adding package references to 
+<code class="language-plaintext highlighter-rouge">chromium.[RID]</code> as necessary.</p>
+
+<h2 id="sponsors">Sponsors</h2>
+
+<p><a href="https://github.com/sponsors/devlooped"><img src="https://raw.githubusercontent.com/devlooped/oss/main/assets/images/sponsors.svg" alt="sponsored" /></a> <a href="https://github.com/clarius"><img src="https://raw.githubusercontent.com/clarius/branding/main/logo/byclarius.svg" alt="clarius" /></a><a href="https://github.com/clarius"><img src="https://raw.githubusercontent.com/clarius/branding/main/logo/logo.svg" alt="clarius" /></a></p>
+
+<p><em><a href="https://github.com/sponsors/devlooped">get mentioned here too</a>!</em></p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        
+        <p class="copyright">chromium maintained by <a href="https://github.com/devlooped">devlooped</a></p>
+        
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>
